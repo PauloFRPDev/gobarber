@@ -92,6 +92,17 @@ class AppointmentController {
         .json({ error: 'Appointment date is not available' });
     }
 
+    /**
+     * Check if the user is trying to create an appointment with himself
+     */
+    const checkCreateAppointmentForHimself = provider_id === req.userId;
+
+    if (checkCreateAppointmentForHimself) {
+      return res
+        .status(400)
+        .json({ error: 'You can not create and appointment with yourself' });
+    }
+
     const appointment = await Appointment.create({
       user_id: req.userId,
       provider_id,
